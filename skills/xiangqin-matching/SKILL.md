@@ -172,3 +172,53 @@ description: Use when analyzing compatibility between two people for a potential
 | 3.0 - 3.9 | 有潜力 | 基础扎实，关注需要成长的领域 |
 | 2.0 - 2.9 | 需谨慎 | 存在显著差异，需要坦诚沟通 |
 | 1.0 - 1.9 | 弱匹配 | 根本性不合，大概率会产生持续摩擦 |
+
+## 分析流程
+
+```dot
+digraph xiangqin_analysis {
+    rankdir=TB;
+    node [shape=box];
+
+    start [label="收集双方资料" shape=oval];
+    complete [label="资料完整？" shape=diamond];
+    ask [label="询问缺失信息\n（标注关键缺失）"];
+    score_values [label="评分：核心价值观 (30%)"];
+    score_lifestyle [label="评分：生活方式 (25%)"];
+    score_emotional [label="评分：情感沟通 (25%)"];
+    score_background [label="评分：背景条件 (10%)"];
+    score_interests [label="评分：兴趣活动 (10%)"];
+    calc [label="计算加权总分"];
+    check_dealbreakers [label="有一票否决项？" shape=diamond];
+    flag [label="标记为「不推荐」\n一票否决项优先于总分"];
+    recommend [label="针对薄弱维度\n生成具体建议"];
+    output [label="输出完整分析报告" shape=oval];
+
+    start -> complete;
+    complete -> score_values [label="是"];
+    complete -> ask [label="否"];
+    ask -> score_values [label="已补充"];
+    score_values -> score_lifestyle;
+    score_lifestyle -> score_emotional;
+    score_emotional -> score_background;
+    score_background -> score_interests;
+    score_interests -> calc;
+    calc -> check_dealbreakers;
+    check_dealbreakers -> flag [label="是"];
+    check_dealbreakers -> recommend [label="否"];
+    recommend -> output;
+    flag -> output;
+}
+```
+
+**五步分析法：**
+
+1. **收集信息** —— 使用个人资料模板。信息不全时主动询问。区分关键缺失（价值观、底线条件）和次要缺失（具体爱好）。
+
+2. **逐维度评分** —— 使用评分标准表。每个分数必须有具体依据，例如"生活方式：3/5，因为一方宅家一方爱社交，但双方都表示愿意妥协"。
+
+3. **优先检查一票否决项** —— 任何一方有硬性底线条件对方无法满足的，直接标记为「不推荐」，无论总分多高。常见一票否决项：生育意愿、地域限制、彩礼分歧、宗教要求。
+
+4. **计算总分并定级** —— 按加权公式计算，对照评级表。
+
+5. **生成针对性建议** —— 聚焦最薄弱的1-2个维度，给出具体、可操作的建议。绝不给笼统的建议——每条建议都要引用具体的个人资料细节。
